@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CarHub - Jual Beli Mobil Terpercaya</title>
   <meta name="description" content="CarHub adalah platform jual beli mobil terpercaya di Indonesia. Temukan mobil impian Anda dengan harga terbaik, proses mudah, dan terjamin.">
-  <link rel="icon" type="image/png" href="<?= base_url('bagus2.png') ?>">
+  <link rel="icon" type="image/png" href="<?= base_url('assets/img/bagus2.png') ?>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,7 +108,7 @@
   <header class="fixed top-0 w-full z-50 nav-glass">
     <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3">
-        <img src="<?= base_url('bagus.png') ?>" alt="CarHub Logo" style="height:44px;width:auto;"></a>
+        <img src="<?= base_url('assets/img/bagus.png') ?>" alt="CarHub Logo" style="height:44px;width:auto;"></a>
       <nav class="hidden md:flex items-center gap-8">
         <a href="#fitur" class="text-sm text-white/70 hover:text-white transition-colors">Fitur</a>
         <a href="#cara-kerja" class="text-sm text-white/70 hover:text-white transition-colors">Cara Kerja</a>
@@ -372,7 +372,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex items-center gap-3">
-          <img src="<?= base_url('bagus.png') ?>" alt="CarHub" style="height:90px;width:auto;">
+          <img src="<?= base_url('assets/img/bagus.png') ?>" alt="CarHub" style="height:90px;width:auto;">
         </div>
         <p class="text-sm text-white/40">&copy; <?= date('Y') ?> CarHub. Platform Jual Beli Mobil Terpercaya.</p>
         <div class="flex items-center gap-6">

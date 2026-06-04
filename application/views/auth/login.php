@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - CarHub</title>
-  <link rel="icon" type="image/png" href="<?= base_url('bagus2.png') ?>">
+  <link rel="icon" type="image/png" href="<?= base_url('assets/img/bagus2.png') ?>">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,7 +43,7 @@
       <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiLz4KPC9zdmc+')]"></div>
       
       <div class="relative z-10 text-white text-center">
-        <img src="<?= base_url('bagus.png') ?>" alt="CarHub" style="height:220px;width:auto;" class="mx-auto mb-6 drop-shadow-lg">
+        <img src="<?= base_url('assets/img/bagus.png') ?>" alt="CarHub" style="height:220px;width:auto;" class="mx-auto mb-6 drop-shadow-lg">
         <p class="text-primary-100 text-base max-w-sm mx-auto leading-relaxed">Sistem Manajemen Jual Beli Mobil yang efisien, terstruktur, dan mudah digunakan.</p>
       </div>
       
@@ -57,7 +57,7 @@
       <div class="w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
         
         <div class="lg:hidden mb-6">
-          <img src="<?= base_url('bagus2.png') ?>" alt="CarHub" style="height:100px;width:auto;">
+          <img src="<?= base_url('assets/img/bagus2.png') ?>" alt="CarHub" style="height:100px;width:auto;">
         </div>
 
         <h2 class="text-2xl font-bold text-neutral-900 mb-2">Selamat Datang</h2>

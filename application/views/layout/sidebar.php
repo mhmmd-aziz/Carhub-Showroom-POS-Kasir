@@ -3,7 +3,7 @@
     <!-- Logo — sticky di atas, z-10 supaya tidak tenggelam saat nav di-scroll -->
     <div class="h-24 flex items-center justify-center px-5 border-b border-neutral-100 flex-shrink-0 bg-white relative z-10">
       <a href="<?= base_url('landing') ?>" class="block w-full">
-        <img src="<?= base_url('bagus2.png') ?>" alt="CarHub"
+        <img src="<?= base_url('assets/img/bagus2.png') ?>" alt="CarHub"
              style="width:100%;max-width:168px;height:auto;object-fit:contain;display:block;margin:0 auto;">
       </a>
     </div>
@@ -52,7 +52,7 @@
     <div class="p-3 border-t border-neutral-100 flex-shrink-0">
       <div class="rounded-xl p-4 text-white" style="background:#021d6c;">
         <div class="flex items-center gap-2 mb-1">
-          <img src="<?= base_url('bagus.png') ?>" alt="CarHub" style="height:32px;width:auto;">
+          <img src="<?= base_url('assets/img/bagus.png') ?>" alt="CarHub" style="height:32px;width:auto;">
         </div>
         <p class="text-xs text-neutral-300 mb-3 truncate"><?= $this->session->userdata('nama_lengkap') ?: 'Administrator' ?></p>
         <a href="<?= base_url('auth/logout') ?>"
