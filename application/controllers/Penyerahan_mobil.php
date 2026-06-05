@@ -65,12 +65,13 @@ class Penyerahan_mobil extends MY_Controller {
         }
 
         $data_serah = [
-            'id_penjualan'  => $id_penjualan,
-            'tgl_serah_unit'=> $this->input->post('tgl_serah_unit'),
-            'tgl_serah_bpkb'=> $this->input->post('tgl_serah_bpkb'),
-            'metode_serah'  => $this->input->post('metode_serah'),
-            'nama_penerima' => $this->input->post('nama_penerima'),
-            'alamat_tujuan' => $this->input->post('alamat_tujuan')
+            'id_penjualan'     => $id_penjualan,
+            'tgl_serah_unit'   => $this->input->post('tgl_serah_unit'),
+            'tgl_serah_bpkb'   => $this->input->post('tgl_serah_bpkb'),
+            'metode_serah'     => $this->input->post('metode_serah'),
+            'nama_penerima'    => $this->input->post('nama_penerima'),
+            'alamat_tujuan'    => $this->input->post('alamat_tujuan'),
+            'status_penyerahan'=> 'dalam_proses', // Default: dalam proses, tunggu konfirmasi
         ];
 
         $this->Penyerahan_mobil_model->insert($data_serah);
@@ -92,7 +93,32 @@ class Penyerahan_mobil extends MY_Controller {
             ]);
         }
 
-        $this->session->set_flashdata('success', 'Penyerahan mobil berhasil diproses. Cetak Surat Jalan jika diperlukan.');
+        $this->session->set_flashdata('success', 'Penyerahan mobil berhasil diproses. Status: Dalam Proses. Update ke Selesai setelah konfirmasi penerimaan.');
+        redirect('penyerahan_mobil');
+    }
+
+    /**
+     * Update status penyerahan menjadi Selesai.
+     * Dipanggil setelah ada konfirmasi dari kurir/customer bahwa mobil sudah diterima.
+     */
+    public function selesai($id_penyerahan) {
+        $this->check_admin_access();
+
+        $penyerahan = $this->Penyerahan_mobil_model->get_by_id($id_penyerahan);
+        if (!$penyerahan) {
+            $this->session->set_flashdata('error', 'Data penyerahan tidak ditemukan.');
+            redirect('penyerahan_mobil');
+            return;
+        }
+
+        if ($penyerahan['status_penyerahan'] === 'selesai') {
+            $this->session->set_flashdata('error', 'Status penyerahan sudah Selesai.');
+            redirect('penyerahan_mobil');
+            return;
+        }
+
+        $this->Penyerahan_mobil_model->update_status($id_penyerahan, 'selesai');
+        $this->session->set_flashdata('success', 'Status penyerahan berhasil diubah menjadi Selesai.');
         redirect('penyerahan_mobil');
     }
 }

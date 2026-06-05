@@ -8,8 +8,8 @@ class Penyerahan_mobil_model extends CI_Model {
         $this->db->from('penyerahan_mobil');
         $this->db->join('penjualan', 'penjualan.id_penjualan = penyerahan_mobil.id_penjualan');
         $this->db->join('pemesanan', 'pemesanan.id_pemesanan = penjualan.id_pemesanan');
-        $this->db->join('customer', 'customer.id_customer = pemesanan.id_customer');
-        $this->db->join('mobil', 'mobil.id_mobil = pemesanan.id_mobil');
+        $this->db->join('customer',  'customer.id_customer = pemesanan.id_customer');
+        $this->db->join('mobil',     'mobil.id_mobil = pemesanan.id_mobil');
         $this->db->order_by('penyerahan_mobil.id_penyerahan', 'DESC');
         return $this->db->get()->result_array();
     }
@@ -22,8 +22,20 @@ class Penyerahan_mobil_model extends CI_Model {
         return $this->db->get_where('penyerahan_mobil', ['id_penjualan' => $id_penjualan])->row_array();
     }
 
+    public function get_by_id($id_penyerahan) {
+        return $this->db->get_where('penyerahan_mobil', ['id_penyerahan' => $id_penyerahan])->row_array();
+    }
+
     public function insert($data) {
         $this->db->insert('penyerahan_mobil', $data);
         return $this->db->insert_id();
+    }
+
+    /**
+     * Update status penyerahan (dalam_proses → selesai).
+     */
+    public function update_status($id_penyerahan, $status) {
+        $this->db->where('id_penyerahan', $id_penyerahan);
+        return $this->db->update('penyerahan_mobil', ['status_penyerahan' => $status]);
     }
 }

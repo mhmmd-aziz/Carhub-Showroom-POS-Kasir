@@ -5,7 +5,6 @@ class Dashboard extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        // Load models later when we have them
     }
 
     public function index() {
@@ -14,26 +13,17 @@ class Dashboard extends MY_Controller {
         $current_month = date('m');
         $current_year = date('Y');
 
-        // Total Pemesanan bulan ini
-        $this->db->where('MONTH(tgl_pesan)', $current_month);
-        $this->db->where('YEAR(tgl_pesan)', $current_year);
-        $data['total_pemesanan'] = $this->db->count_all_results('pemesanan');
+        // Total Customer (terdaftar, tidak dihapus)
+        $this->db->where('deleted_at', NULL);
+        $data['total_customer'] = $this->db->count_all_results('customer');
 
-        // Stok Tersedia
-        $this->db->select_sum('stok');
-        $query_stok = $this->db->get('mobil')->row();
-        $data['stok_tersedia'] = $query_stok->stok ?? 0;
+        // Total Supplier (terdaftar, tidak dihapus)
+        $this->db->where('deleted_at', NULL);
+        $data['total_supplier'] = $this->db->count_all_results('supplier');
 
-        // Total Customer
-        $data['total_customer'] = $this->db->count_all('customer');
-
-        // Total Penjualan bulan ini (Lunas)
-        $this->db->select_sum('total_bayaran');
-        $this->db->where('status_pelunasan', 'lunas');
-        $this->db->where('MONTH(tgl_penjualan)', $current_month);
-        $this->db->where('YEAR(tgl_penjualan)', $current_year);
-        $query_penjualan = $this->db->get('penjualan')->row();
-        $data['total_penjualan'] = $query_penjualan->total_bayaran ?? 0;
+        // Total Mobil (aktif, tidak dihapus)
+        $this->db->where('deleted_at', NULL);
+        $data['total_mobil'] = $this->db->count_all_results('mobil');
 
         // --- CHART DATA ---
         
@@ -66,8 +56,19 @@ class Dashboard extends MY_Controller {
         }
         
         if (empty($chart_brands_labels)) {
-            $chart_brands_labels = ['Belum ada data'];
-            $chart_brands_data = [1];
+            // Tampilkan distribusi stok per merek sebagai fallback
+            $this->db->select('merek, COUNT(*) as total');
+            $this->db->where('deleted_at', NULL);
+            $this->db->group_by('merek');
+            $stok_brands = $this->db->get('mobil')->result_array();
+            foreach ($stok_brands as $b) {
+                $chart_brands_labels[] = $b['merek'];
+                $chart_brands_data[] = (int)$b['total'];
+            }
+            if (empty($chart_brands_labels)) {
+                $chart_brands_labels = ['Belum ada data'];
+                $chart_brands_data = [1];
+            }
         }
         
         $data['chart_brands_labels'] = json_encode($chart_brands_labels);

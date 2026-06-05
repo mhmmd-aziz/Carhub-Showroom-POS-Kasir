@@ -79,6 +79,18 @@ try {
     $check_laporan = $pdo->query("SHOW TABLES LIKE 'laporan'")->fetch();
     echo "\nTabel laporan: " . ($check_laporan ? 'EXISTS' : 'MISSING') . "\n";
 
+    // 8. Tambah status_penyerahan ke penyerahan_mobil
+    try {
+        $pdo->exec("ALTER TABLE penyerahan_mobil ADD COLUMN status_penyerahan ENUM('dalam_proses','selesai') NOT NULL DEFAULT 'dalam_proses' AFTER alamat_tujuan");
+        echo "OK: Column status_penyerahan added to penyerahan_mobil\n";
+    } catch (PDOException $e) {
+        if (str_contains($e->getMessage(), 'Duplicate')) {
+            echo "SKIP: status_penyerahan already exists\n";
+        } else {
+            throw $e;
+        }
+    }
+
     echo "\n=== All migrations completed! ===\n";
 
 } catch (PDOException $e) {

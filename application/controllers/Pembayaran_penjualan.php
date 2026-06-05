@@ -11,9 +11,10 @@ class Pembayaran_penjualan extends MY_Controller {
         $this->load->model('Mobil_model');
     }
 
-    public function index() {
-        $data['title'] = 'Data Pembayaran Penjualan';
-        $data['pembayaran'] = $this->Pembayaran_penjualan_model->get_all();
+    public function index($filter = 'semua') {
+        $data['title']     = 'Data Pembayaran Penjualan';
+        $data['filter']    = $filter;
+        $data['pembayaran'] = $this->Pembayaran_penjualan_model->get_all($filter);
         $this->render_page('pembayaran_penjualan/index', $data);
     }
 

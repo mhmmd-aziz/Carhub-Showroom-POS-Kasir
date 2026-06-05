@@ -129,7 +129,7 @@
 
     <!-- Background image -->
     <div class="absolute inset-0 z-0">
-      <img src="<?= base_url('show.png') ?>" alt="CarHub Showroom"
+      <img src="<?= base_url('assets/img/show.png') ?>" alt="CarHub Showroom"
            class="w-full h-full object-cover object-center">
       <!-- Cinematic multi-layer overlay -->
       <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,9,42,0.92) 0%, rgba(2,29,108,0.75) 50%, rgba(0,9,42,0.55) 100%);"></div>
