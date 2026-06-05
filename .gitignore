@@ -42,6 +42,5 @@ arsitektur.md
 .cursor/
 
 # Local Environment & Dependencies
-/application/config/database.php
 node_modules/
 vendor/
