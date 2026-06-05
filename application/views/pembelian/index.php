@@ -84,11 +84,7 @@
               <td class="px-6 py-4">
                 <div class="flex items-center gap-2">
                   <?php if($p['status_pembayaran'] == 'menunggu'): ?>
-                    <?php if($this->session->userdata('role') === 'admin'): ?>
-                      <a href="<?= base_url('pembayaran_pembelian/bayar/'.$p['id_pembelian']) ?>" class="px-3 py-1.5 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-md text-xs font-medium transition-colors">Bayar</a>
-                    <?php else: ?>
-                      <span class="text-xs text-neutral-400">Menunggu</span>
-                    <?php endif; ?>
+                    <span class="text-xs text-neutral-400 italic">Menunggu Pembayaran</span>
                   <?php else: ?>
                     <a href="<?= base_url('cetak/faktur_pembelian/'.$p['id_pembelian']) ?>" target="_blank" class="p-1.5 rounded-md hover:bg-neutral-100 text-neutral-500 transition-colors tooltip" title="Cetak Faktur">
                       <i data-lucide="printer" class="w-4 h-4"></i>

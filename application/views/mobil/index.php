@@ -69,8 +69,19 @@
             <?php foreach($mobils as $m): ?>
             <tr class="hover:bg-neutral-50/80 transition-colors group">
               <td class="px-6 py-3">
-                <p class="text-sm font-semibold text-neutral-900 data-search"><?= htmlspecialchars($m['merek']) ?> <?= htmlspecialchars($m['nama_mobil']) ?></p>
-                <p class="text-xs text-neutral-500 data-search"><?= htmlspecialchars($m['tipe']) ?> · <?= htmlspecialchars($m['warna']) ?> · <?= $m['tahun'] ?></p>
+                <div class="flex items-center gap-3">
+                  <?php if(!empty($m['foto_mobil'])): ?>
+                    <img src="<?= base_url('uploads/mobil/'.$m['foto_mobil']) ?>" alt="Foto Mobil" class="w-12 h-12 rounded-lg object-cover border border-neutral-200">
+                  <?php else: ?>
+                    <div class="w-12 h-12 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-400">
+                      <i data-lucide="car" class="w-5 h-5"></i>
+                    </div>
+                  <?php endif; ?>
+                  <div>
+                    <p class="text-sm font-semibold text-neutral-900 data-search"><?= htmlspecialchars($m['merek']) ?> <?= htmlspecialchars($m['nama_mobil']) ?></p>
+                    <p class="text-xs text-neutral-500 data-search"><?= htmlspecialchars($m['tipe']) ?> · <?= htmlspecialchars($m['warna']) ?> · <?= $m['tahun'] ?></p>
+                  </div>
+                </div>
               </td>
               <td class="px-6 py-3">
                 <p class="text-sm font-mono text-neutral-700 data-search"><?= htmlspecialchars($m['no_polisi']) ?></p>
@@ -126,7 +137,7 @@
 
   document.getElementById('btn-tambah').addEventListener('click', function() {
     const html = `
-      <form action="<?= base_url('mobil/store') ?>" method="POST" class="space-y-4">
+      <form action="<?= base_url('mobil/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2 space-y-1.5">
             <label class="text-sm font-medium text-neutral-700">Supplier <span class="text-red-500">*</span></label>
@@ -187,6 +198,11 @@
               <option value="proses">Proses</option>
             </select>
           </div>
+          <div class="col-span-2 space-y-1.5">
+            <label class="text-sm font-medium text-neutral-700">Foto Mobil</label>
+            <input type="file" name="foto_mobil" accept="image/*" class="w-full px-3.5 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 transition-all cursor-pointer">
+            <p class="text-xs text-neutral-500">Opsional. Format: JPG, PNG (Max 5MB)</p>
+          </div>
         </div>
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100">
           <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors">Batal</button>
@@ -198,7 +214,7 @@
 
   function openEditModal(d) {
     const html = `
-      <form action="<?= base_url('mobil/update') ?>" method="POST" class="space-y-4">
+      <form action="<?= base_url('mobil/update') ?>" method="POST" enctype="multipart/form-data" class="space-y-4">
         <input type="hidden" name="id_mobil" value="${d.id_mobil}">
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2 space-y-1.5">
@@ -266,6 +282,11 @@
               <option value="baik" ${d.status_mobil=='baik'?'selected':''}>Baik</option>
               <option value="perlu_servis" ${d.status_mobil=='perlu_servis'?'selected':''}>Perlu Servis</option>
             </select>
+          </div>
+          <div class="col-span-2 space-y-1.5">
+            <label class="text-sm font-medium text-neutral-700">Update Foto Mobil</label>
+            <input type="file" name="foto_mobil" accept="image/*" class="w-full px-3.5 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 transition-all cursor-pointer">
+            <p class="text-xs text-neutral-500">Opsional. Kosongkan jika tidak ingin mengubah foto. Format: JPG, PNG (Max 5MB)</p>
           </div>
         </div>
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-neutral-100">

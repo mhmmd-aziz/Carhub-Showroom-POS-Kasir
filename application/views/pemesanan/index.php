@@ -120,7 +120,6 @@
                 <div class="flex items-center gap-2 flex-wrap">
                   <?php if(in_array($p['status_pemesanan'], ['menunggu', 'bukti_pesanan'])): ?>
                     <?php if($this->session->userdata('role') === 'admin'): ?>
-                      <a href="<?= base_url('pembayaran_penjualan/bayar/'.$p['id_pemesanan']) ?>" class="px-3 py-1.5 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-md text-xs font-medium transition-colors whitespace-nowrap">Proses Bayar</a>
                       <!-- FIX BUG-010: Tombol Batalkan -->
                       <a href="<?= base_url('pemesanan/batal/'.$p['id_pemesanan']) ?>" class="px-3 py-1.5 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-md text-xs font-medium transition-colors whitespace-nowrap">Batalkan</a>
                     <?php else: ?>

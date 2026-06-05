@@ -104,23 +104,24 @@
               <?php endif; ?>
             </div>
 
-            <!-- Bagian Transfer Bank -->
             <div id="transfer_section" class="hidden space-y-6 p-5 bg-neutral-50 rounded-xl border border-neutral-200 mt-4">
               <div class="space-y-2">
                 <label class="text-sm font-medium text-neutral-700">Upload Bukti Transfer <span class="text-rose-500">*</span></label>
                 <input type="file" name="bukti_transfer" id="bukti_transfer" accept="image/*,.pdf" class="w-full px-4 py-2 text-sm border border-neutral-200 rounded-lg bg-white focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 transition-all cursor-pointer">
                 <p class="text-xs text-neutral-500">Format: JPG, PNG, atau PDF (Max 5MB)</p>
               </div>
+            </div>
 
-              <!-- FIX INKON-004: Upload KTP untuk DP dan Pelunasan -->
-              <?php if(in_array($tahap, ['dp', 'pelunasan'])): ?>
+            <!-- FIX INKON-004: Upload KTP untuk DP dan Pelunasan -->
+            <?php if(in_array($tahap, ['dp', 'pelunasan'])): ?>
+            <div class="space-y-6 p-5 bg-amber-50/50 rounded-xl border border-amber-200 mt-4">
               <div class="space-y-2">
                 <label class="text-sm font-medium text-neutral-700">Upload Fotokopi KTP Customer <span class="text-rose-500">*</span></label>
-                <input type="file" name="bukti_ktp" id="bukti_ktp" accept="image/*,.pdf" class="w-full px-4 py-2 text-sm border border-neutral-200 rounded-lg bg-white focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 transition-all cursor-pointer">
-                <p class="text-xs text-neutral-500">Wajib untuk pembayaran DP dan Pelunasan. Format: JPG, PNG, atau PDF (Max 5MB)</p>
+                <input type="file" name="bukti_ktp" id="bukti_ktp" accept="image/*,.pdf" required class="w-full px-4 py-2 text-sm border border-neutral-200 rounded-lg bg-white focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 transition-all cursor-pointer">
+                <p class="text-xs text-neutral-500">Wajib untuk pembayaran DP dan Pelunasan baik Tunai maupun Transfer. Format: JPG, PNG, atau PDF (Max 5MB)</p>
               </div>
-              <?php endif; ?>
             </div>
+            <?php endif; ?>
 
             <div class="pt-6 border-t border-neutral-100 flex justify-end gap-3">
               <a href="<?= $back_link ?>" class="px-5 py-2.5 text-sm font-medium text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors">Kembali</a>
@@ -157,16 +158,13 @@
     const metode = document.getElementById('metode_pembayaran').value;
     const section = document.getElementById('transfer_section');
     const inputBukti = document.getElementById('bukti_transfer');
-    const inputKtp = document.getElementById('bukti_ktp');
     
     if (metode === 'transfer') {
       section.classList.remove('hidden');
       if (inputBukti) inputBukti.required = true;
-      if (inputKtp) inputKtp.required = true;
     } else {
       section.classList.add('hidden');
       if (inputBukti) inputBukti.required = false;
-      if (inputKtp) inputKtp.required = false;
     }
   }
 </script>

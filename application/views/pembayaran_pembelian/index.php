@@ -3,19 +3,71 @@
   <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden flex flex-col h-full max-h-[calc(100vh-120px)]">
     <div class="px-6 py-5 border-b border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="font-semibold text-neutral-900 text-lg">Histori Pembayaran Pembelian</h2>
-        <p class="text-xs text-neutral-500 mt-1">Daftar pembayaran yang telah dilakukan ke supplier.</p>
+        <h2 class="font-semibold text-neutral-900 text-lg">Pembayaran Pembelian</h2>
+        <p class="text-xs text-neutral-500 mt-1">Kelola tagihan pembelian ke supplier dan histori pembayaran.</p>
       </div>
       <div class="flex items-center gap-3">
         <div class="relative">
           <i data-lucide="search" class="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
-          <input type="text" id="searchInput" placeholder="Cari pembayaran..." 
+          <input type="text" id="searchInput" placeholder="Cari data..." 
                  class="pl-9 pr-4 py-2 text-sm border border-neutral-200 rounded-lg bg-neutral-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-64 transition-all">
         </div>
       </div>
     </div>
 
-    <div class="flex-1 overflow-auto">
+    <!-- Tab Navigasi -->
+    <div class="border-b border-neutral-100 flex gap-6 px-6 pt-2 bg-neutral-50/50">
+      <button onclick="switchTab('tagihan')" id="tabTagihan" class="pb-3 text-sm font-medium border-b-2 border-primary-600 text-primary-600 transition-colors">Menunggu Pembayaran</button>
+      <button onclick="switchTab('histori')" id="tabHistori" class="pb-3 text-sm font-medium border-b-2 border-transparent text-neutral-500 hover:text-neutral-700 transition-colors">Histori Pembayaran</button>
+    </div>
+
+    <div class="flex-1 overflow-auto p-0" id="contentTagihan">
+      <table class="w-full text-left border-collapse" id="dataTableTagihan">
+        <thead class="sticky top-0 bg-neutral-50 z-10 shadow-sm">
+          <tr>
+            <th class="text-xs font-semibold text-neutral-500 uppercase tracking-wider px-6 py-4 border-b border-neutral-200">ID TRX / Tgl</th>
+            <th class="text-xs font-semibold text-neutral-500 uppercase tracking-wider px-6 py-4 border-b border-neutral-200">Supplier & Unit</th>
+            <th class="text-xs font-semibold text-neutral-500 uppercase tracking-wider px-6 py-4 border-b border-neutral-200">Total Tagihan</th>
+            <th class="text-xs font-semibold text-neutral-500 uppercase tracking-wider px-6 py-4 border-b border-neutral-200 w-24">Aksi</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-neutral-100 bg-white">
+          <?php if(empty($menunggu)): ?>
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-neutral-500 text-sm">
+              <div class="flex flex-col items-center justify-center">
+                <i data-lucide="check-circle" class="w-10 h-10 text-neutral-300 mb-3"></i>
+                <p>Tidak ada tagihan yang menunggu pembayaran.</p>
+              </div>
+            </td>
+          </tr>
+          <?php else: ?>
+            <?php foreach($menunggu as $m): ?>
+            <tr class="hover:bg-neutral-50/80 transition-colors group">
+              <td class="px-6 py-4">
+                <p class="text-sm font-semibold text-primary-600 data-search">TRX-B-<?= str_pad($m['id_pembelian'], 4, '0', STR_PAD_LEFT) ?></p>
+                <p class="text-xs text-neutral-500 mt-0.5 data-search"><?= date('d M Y', strtotime($m['tgl_pembelian'])) ?></p>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm font-medium text-neutral-900 data-search"><?= $m['nama_supplier'] ?></p>
+                <p class="text-xs text-neutral-500 mt-0.5 data-search"><?= $m['nama_mobil'] ?></p>
+              </td>
+              <td class="px-6 py-4 text-sm font-mono font-medium text-amber-600 data-search">
+                Rp <?= number_format($m['harga_beli_beli'], 0, ',', '.') ?>
+              </td>
+              <td class="px-6 py-4">
+                <?php if($this->session->userdata('role') === 'admin'): ?>
+                  <a href="<?= base_url('pembayaran_pembelian/bayar/'.$m['id_pembelian']) ?>" class="px-3 py-1.5 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-md text-xs font-medium transition-colors whitespace-nowrap">Proses Bayar</a>
+                <?php endif; ?>
+              </td>
+            </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex-1 overflow-auto p-0 hidden" id="contentHistori">
       <table class="w-full text-left border-collapse" id="dataTable">
         <thead class="sticky top-0 bg-neutral-50 z-10 shadow-sm">
           <tr>
@@ -80,22 +132,48 @@
 </main>
 
 <script>
+  function switchTab(tab) {
+    const tabTagihan = document.getElementById('tabTagihan');
+    const tabHistori = document.getElementById('tabHistori');
+    const contentTagihan = document.getElementById('contentTagihan');
+    const contentHistori = document.getElementById('contentHistori');
+
+    if(tab === 'tagihan') {
+      tabTagihan.classList.add('border-primary-600', 'text-primary-600');
+      tabTagihan.classList.remove('border-transparent', 'text-neutral-500');
+      tabHistori.classList.remove('border-primary-600', 'text-primary-600');
+      tabHistori.classList.add('border-transparent', 'text-neutral-500');
+      contentTagihan.classList.remove('hidden');
+      contentHistori.classList.add('hidden');
+    } else {
+      tabHistori.classList.add('border-primary-600', 'text-primary-600');
+      tabHistori.classList.remove('border-transparent', 'text-neutral-500');
+      tabTagihan.classList.remove('border-primary-600', 'text-primary-600');
+      tabTagihan.classList.add('border-transparent', 'text-neutral-500');
+      contentHistori.classList.remove('hidden');
+      contentTagihan.classList.add('hidden');
+    }
+  }
+
   document.getElementById('searchInput').addEventListener('keyup', function() {
     const filter = this.value.toLowerCase();
-    const rows = document.querySelectorAll('#dataTable tbody tr');
-
-    rows.forEach(row => {
+    
+    // Cari di tabel tagihan
+    const rowsTagihan = document.querySelectorAll('#dataTableTagihan tbody tr');
+    rowsTagihan.forEach(row => {
       if(row.cells.length === 1) return;
-      
-      const searchItems = row.querySelectorAll('.data-search');
       let text = '';
-      searchItems.forEach(item => text += item.textContent.toLowerCase() + ' ');
-      
-      if(text.includes(filter)) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
+      row.querySelectorAll('.data-search').forEach(item => text += item.textContent.toLowerCase() + ' ');
+      row.style.display = text.includes(filter) ? '' : 'none';
+    });
+
+    // Cari di tabel histori
+    const rowsHistori = document.querySelectorAll('#dataTable tbody tr');
+    rowsHistori.forEach(row => {
+      if(row.cells.length === 1) return;
+      let text = '';
+      row.querySelectorAll('.data-search').forEach(item => text += item.textContent.toLowerCase() + ' ');
+      row.style.display = text.includes(filter) ? '' : 'none';
     });
   });
 

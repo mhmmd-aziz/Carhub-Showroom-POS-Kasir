@@ -15,6 +15,17 @@ class Pembayaran_penjualan extends MY_Controller {
         $data['title']     = 'Data Pembayaran Penjualan';
         $data['filter']    = $filter;
         $data['pembayaran'] = $this->Pembayaran_penjualan_model->get_all($filter);
+        
+        // Data untuk tab
+        $this->db->where('status_pemesanan', 'menunggu');
+        $data['menunggu_tanda_jadi'] = $this->Pemesanan_model->get_all();
+
+        $this->db->where('status_pemesanan', 'bukti_pesanan');
+        $data['menunggu_dp'] = $this->Pemesanan_model->get_all();
+
+        $this->db->where('status_pelunasan', 'belum_lunas');
+        $data['menunggu_pelunasan'] = $this->Penjualan_model->get_all();
+
         $this->render_page('pembayaran_penjualan/index', $data);
     }
 
@@ -109,17 +120,17 @@ class Pembayaran_penjualan extends MY_Controller {
                 return;
             }
             $bukti_transfer = $result_transfer['file_name'];
+        }
 
-            // Upload KTP (wajib untuk DP dan Pelunasan sesuai CLAUDE.md)
-            if (in_array($tahap, ['dp', 'pelunasan'])) {
-                $result_ktp = $this->_upload_file('bukti_ktp', './uploads/bukti_ktp/');
-                if ($result_ktp['error']) {
-                    $this->session->set_flashdata('error', 'Gagal upload fotokopi KTP: ' . $result_ktp['error']);
-                    redirect('pembayaran_penjualan/bayar/' . $id_pemesanan);
-                    return;
-                }
-                $bukti_ktp = $result_ktp['file_name'];
+        // Upload KTP wajib untuk DP dan Pelunasan, baik tunai maupun transfer
+        if (in_array($tahap, ['dp', 'pelunasan'])) {
+            $result_ktp = $this->_upload_file('bukti_ktp', './uploads/bukti_ktp/');
+            if ($result_ktp['error']) {
+                $this->session->set_flashdata('error', 'Gagal upload fotokopi KTP: ' . $result_ktp['error']);
+                redirect('pembayaran_penjualan/bayar/' . $id_pemesanan);
+                return;
             }
+            $bukti_ktp = $result_ktp['file_name'];
         }
 
         // Siapkan data pembayaran
