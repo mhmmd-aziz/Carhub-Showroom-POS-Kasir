@@ -8,6 +8,7 @@ class Pemesanan extends MY_Controller {
         $this->load->model('Pemesanan_model');
         $this->load->model('Customer_model');
         $this->load->model('Mobil_model');
+        $this->load->model('Pembayaran_penjualan_model');
     }
 
     /**
@@ -163,6 +164,19 @@ class Pemesanan extends MY_Controller {
         if ($dalam_7_hari) {
             // Batalkan: refund tanda jadi (logika bisnis: catat refund)
             $status_baru = 'batal';
+            
+            // Catat refund ke pembayaran_penjualan
+            $data_refund = [
+                'id_pemesanan'     => $id_pemesanan,
+                'jenis_pembayaran' => 'refund',
+                'metode_pembayaran'=> 'tunai', // Default refund dikembalikan cash/tunai
+                'tgl_bayar'        => date('Y-m-d'),
+                'jumlah_bayar'     => 500000, // Tanda Jadi
+                'status_pemesanan' => 'batal',
+                'status_verifikasi'=> 1
+            ];
+            $this->Pembayaran_penjualan_model->insert($data_refund);
+
         } else {
             // Hangus: tanda jadi tidak dikembalikan
             $status_baru = 'hangus';

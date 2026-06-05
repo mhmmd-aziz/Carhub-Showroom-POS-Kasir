@@ -122,8 +122,8 @@ class Pembayaran_penjualan extends MY_Controller {
             $bukti_transfer = $result_transfer['file_name'];
         }
 
-        // Upload KTP wajib untuk DP dan Pelunasan, baik tunai maupun transfer
-        if (in_array($tahap, ['dp', 'pelunasan'])) {
+        // Upload KTP wajib untuk DP saja
+        if ($tahap == 'dp') {
             $result_ktp = $this->_upload_file('bukti_ktp', './uploads/bukti_ktp/');
             if ($result_ktp['error']) {
                 $this->session->set_flashdata('error', 'Gagal upload fotokopi KTP: ' . $result_ktp['error']);

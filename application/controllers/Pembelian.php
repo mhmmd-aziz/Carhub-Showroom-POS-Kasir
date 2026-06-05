@@ -92,6 +92,19 @@ class Pembelian extends MY_Controller {
             $harga_jual_raw = $this->input->post('harga_jual_baru', true);
             $harga_jual     = (float)str_replace(['.', ','], ['', '.'], $harga_jual_raw);
 
+            // Handle upload foto mobil jika ada
+            $foto_mobil = NULL;
+            if (!empty($_FILES['foto_mobil_baru']['name'])) {
+                $result_upload = $this->_upload_foto('foto_mobil_baru');
+                if (!$result_upload['error']) {
+                    $foto_mobil = $result_upload['file_name'];
+                } else {
+                    $this->session->set_flashdata('error', 'Gagal upload foto mobil: ' . $result_upload['error']);
+                    redirect('pembelian/tambah');
+                    return;
+                }
+            }
+
             // Insert mobil baru ke master. Stok = 0 dulu (akan bertambah setelah pembayaran pembelian)
             $data_mobil = [
                 'id_supplier' => $id_supplier,
@@ -105,6 +118,7 @@ class Pembelian extends MY_Controller {
                 'no_mesin'    => $this->input->post('no_mesin_baru', true),
                 'harga_beli'  => $harga_beli,
                 'harga_jual'  => $harga_jual,
+                'foto_mobil'  => $foto_mobil,
                 'status_stok' => 'tersedia',
                 'stok'        => 0, // Stok akan bertambah setelah pembayaran pembelian selesai
             ];
@@ -160,5 +174,29 @@ class Pembelian extends MY_Controller {
         
         // Redirect langsung ke menu Pembayaran Pembelian
         redirect('pembayaran_pembelian');
+    }
+
+    private function _upload_foto($field_name) {
+        $upload_path = './uploads/mobil/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0755, TRUE);
+        }
+
+        $config = [
+            'upload_path'   => $upload_path,
+            'allowed_types' => 'gif|jpg|jpeg|png',
+            'max_size'      => 5120, // 5MB
+            'encrypt_name'  => TRUE
+        ];
+
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload($field_name)) {
+            $upload_data = $this->upload->data();
+            return ['file_name' => $upload_data['file_name'], 'error' => ''];
+        } else {
+            return ['file_name' => '', 'error' => $this->upload->display_errors('', '')];
+        }
     }
 }

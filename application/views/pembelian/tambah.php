@@ -12,7 +12,7 @@
     </div>
 
     <div class="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden p-6">
-      <form action="<?= base_url('pembelian/store') ?>" method="POST" class="space-y-6">
+      <form action="<?= base_url('pembelian/store') ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
 
         <!-- Tanggal Pembelian -->
         <div class="space-y-2">
@@ -183,6 +183,11 @@
                          placeholder="0"
                          class="w-full px-4 py-2.5 text-base font-mono border border-neutral-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-violet-500">
                   <p class="text-xs text-neutral-400">Harga jual yang ditawarkan ke customer</p>
+                </div>
+                <div class="space-y-2 md:col-span-2">
+                  <label class="text-sm font-medium text-neutral-700">Foto Mobil</label>
+                  <input type="file" name="foto_mobil_baru" accept="image/*" class="w-full px-3.5 py-2 text-sm border border-neutral-200 rounded-lg focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 transition-all cursor-pointer bg-white">
+                  <p class="text-xs text-neutral-500">Opsional. Format: JPG, PNG (Max 5MB)</p>
                 </div>
               </div>
               <p class="text-xs text-violet-600 flex items-center gap-1.5">

@@ -118,6 +118,11 @@
               </td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-2 flex-wrap">
+                  <!-- Tombol Cetak SPK selalu muncul untuk semua status -->
+                  <a href="<?= base_url('cetak/faktur_pemesanan/'.$p['id_pemesanan']) ?>" target="_blank" class="p-1.5 rounded-md hover:bg-neutral-100 text-neutral-400 hover:text-neutral-600 transition-colors tooltip" title="Cetak SPK/Faktur">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                  </a>
+
                   <?php if(in_array($p['status_pemesanan'], ['menunggu', 'bukti_pesanan'])): ?>
                     <?php if($this->session->userdata('role') === 'admin'): ?>
                       <!-- FIX BUG-010: Tombol Batalkan -->
@@ -125,8 +130,6 @@
                     <?php else: ?>
                       <span class="text-xs text-neutral-400">Menunggu</span>
                     <?php endif; ?>
-                  <?php else: ?>
-                    <span class="text-xs text-neutral-400 italic">Selesai</span>
                   <?php endif; ?>
                 </div>
               </td>

@@ -43,6 +43,23 @@ class Cetak extends CI_Controller {
         $this->load->view('cetak/faktur_penjualan', $data);
     }
 
+    public function faktur_pemesanan($id_pemesanan) {
+        // Ambil data pemesanan
+        $this->db->select('pemesanan.*, customer.nama as nama_customer, customer.no_telp, customer.alamat, mobil.nama_mobil, mobil.merek, mobil.no_polisi, mobil.no_rangka, mobil.no_mesin, mobil.warna, mobil.tipe, mobil.tahun');
+        $this->db->from('pemesanan');
+        $this->db->join('customer', 'customer.id_customer = pemesanan.id_customer');
+        $this->db->join('mobil', 'mobil.id_mobil = pemesanan.id_mobil');
+        $this->db->where('pemesanan.id_pemesanan', $id_pemesanan);
+        
+        $data['pemesanan'] = $this->db->get()->row_array();
+
+        if (!$data['pemesanan']) {
+            show_404();
+        }
+
+        $this->load->view('cetak/faktur_pemesanan', $data);
+    }
+
     /**
      * Cetak kwitansi pembayaran individual.
      * FIX BUG-011: Tambah endpoint cetak untuk tanda jadi, kwitansi DP, kwitansi pelunasan.
